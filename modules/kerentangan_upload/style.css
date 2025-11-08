@@ -1,0 +1,297 @@
+/* =========================================
+   STYLE GLOBAL & TEMA GRADASI PINK-UNGU
+   ========================================= */
+
+/* Variabel Warna untuk tema */
+:root {
+  --color-pink: #d81b60;
+  --color-purple: #9b59b6;
+  --color-light: #ffffff;
+  --color-dark: #333333;
+  --color-grey: #f4f4f4;
+  --color-grey-dark: #757575;
+  --color-border: #e0e0e0;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  --border-radius: 12px;
+}
+
+/* Reset dasar dan set font */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
+    Helvetica, Arial, sans-serif;
+  line-height: 1.6;
+  /* Gradasi utama sebagai background */
+  background: linear-gradient(
+    135deg,
+    var(--color-pink) 0%,
+    var(--color-purple) 100%
+  );
+  background-attachment: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  color: var(--color-dark);
+}
+
+/* =========================================
+   CONTAINER UTAMA (KARTU LOGIN/DAFTAR/ARTIKEL)
+   ========================================= */
+
+.container {
+  width: 100%;
+  max-width: 500px;
+  background: var(--color-light);
+  padding: 2.5rem 3rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow);
+  /* Efek "glassmorphism" ringan */
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(5px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* Khusus untuk dashboard, bisa lebih lebar */
+.container-dashboard {
+  max-width: 800px;
+}
+
+/* =========================================
+   FORMULIR, INPUT, DAN TOMBOL
+   ========================================= */
+
+h1,
+h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+  color: var(--color-dark);
+}
+
+/* Judul dashboard yang lebih menonjol */
+.dashboard-title {
+  color: var(--color-purple);
+  margin-bottom: 0.5rem;
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem; /* Jarak antar elemen form */
+}
+
+/* Label yang kita tambahkan di HTML */
+label {
+  font-weight: 500;
+  margin-bottom: -0.5rem; /* Dekatkan ke input di bawahnya */
+}
+
+input[type='text'],
+input[type='password'],
+input[type='file'],
+textarea {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--color-dark);
+  transition: all 0.3s ease;
+}
+
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-purple);
+  box-shadow: 0 0 0 3px rgba(155, 89, 182, 0.2);
+}
+
+/* Kustomisasi input file */
+input[type='file'] {
+  border-style: dashed;
+  cursor: pointer;
+}
+
+input[type='file']::file-selector-button {
+  background: var(--color-purple);
+  color: var(--color-light);
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 12px;
+  font-weight: 500;
+  transition: background 0.3s ease;
+}
+
+input[type='file']::file-selector-button:hover {
+  background: var(--color-pink);
+}
+
+textarea {
+  min-height: 150px;
+  resize: vertical;
+}
+
+/* Tombol Submit Utama */
+button[type='submit'] {
+  background: linear-gradient(
+    135deg,
+    var(--color-pink) 0%,
+    var(--color-purple) 100%
+  );
+  color: var(--color-light);
+  border: none;
+  padding: 16px 20px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  border-radius: 8px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+}
+
+button[type='submit']:hover {
+  opacity: 0.9;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-2px);
+}
+
+/* =========================================
+   LINK DAN NAVIGASI
+   ========================================= */
+
+a {
+  color: var(--color-purple);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--color-pink);
+  text-decoration: underline;
+}
+
+/* Link di bagian bawah form (Daftar/Login) */
+.form-footer {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: var(--color-grey-dark);
+}
+
+/* Navigasi di Dashboard */
+nav {
+  text-align: center;
+  margin: 1.5rem 0;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+nav a {
+  display: inline-block;
+  padding: 10px 18px;
+  margin: 0 8px;
+  border-radius: 8px;
+  background: rgba(155, 89, 182, 0.1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+nav a:hover {
+  background: rgba(216, 27, 96, 0.1);
+  color: var(--color-pink);
+  text-decoration: none;
+}
+
+/* =========================================
+   PESAN NOTIFIKASI (TOAST POPUP ATAS)
+   ========================================= */
+
+/* Hapus fallback untuk inline style, kita akan gunakan kelas saja */
+p[style*='color:red'],
+p[style*='color:green'] {
+  display: none;
+}
+
+.message {
+  /* Positioning */
+  position: fixed; /* Mengambang di atas segalanya */
+  top: 20px;
+  left: 50%;
+  z-index: 9999; /* Pastikan paling atas */
+  
+  /* Ukuran & Tampilan */
+  width: auto;
+  max-width: 90%;
+  padding: 16px 24px;
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  font-weight: 500;
+  text-align: center;
+  border: 1px solid transparent;
+
+  /* Sembunyikan (untuk animasi) */
+  opacity: 0;
+  visibility: hidden;
+  transform: translate(-50%, -20px); /* Mulai dari tengah & sedikit ke atas */
+  transition: all 0.4s ease-in-out;
+}
+
+/* Kelas .show ini akan kita tambahkan via JavaScript */
+.message.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(-50%, 0);
+}
+
+/* Warna-warna notifikasi */
+.message.error {
+  background: #ffebee;
+  color: #c62828;
+  border-color: #ef9a9a;
+}
+
+.message.success {
+  background: #e8f5e9;
+  color: #2e7d32;
+  border-color: #a5d6a7;
+}
+
+.message.warning {
+  background: #fff3e0;
+  color: #e65100;
+  border-color: #ffcc80;
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+
+@media (max-width: 600px) {
+  body {
+    padding: 1rem;
+  }
+  .container {
+    padding: 2rem 1.5rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+  nav a {
+    display: block;
+    margin: 8px 0;
+  }
+}
