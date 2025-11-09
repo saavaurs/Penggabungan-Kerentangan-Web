@@ -5,7 +5,6 @@ session_start();
  $dsn = 'mysql:host=127.0.0.1;port=3306;dbname=praktek_sqli;charset=utf8mb4';
  $dbUser = 'root';
  $dbPass = '';
-
  $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
