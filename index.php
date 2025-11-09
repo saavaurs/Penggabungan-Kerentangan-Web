@@ -24,25 +24,25 @@
 
             <ul class="nav-menu">                
                 <li class="nav-item">
-                    <a href="modules/sql_injec/" class="nav-link">
+                    <a href="modules/sql_injection/index.php" class="nav-link">
                         <i class="fas fa-database"></i>
                         <span>SQL Injection</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="modules/xss_main/" class="nav-link">
+                    <a href="modules/xss/" class="nav-link">
                         <i class="fas fa-code"></i>
                         <span>XSS Lab</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="modules/broken_acces/" class="nav-link">
+                    <a href="modules/broken_access_control/" class="nav-link">
                         <i class="fas fa-lock-open"></i>
-                        <span>Broken Access</span>
+                        <span>Broken Access Control</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="modules/kerentangan_upload/" class="nav-link">
+                    <a href="modules/kerentanan_upload/" class="nav-link">
                         <i class="fas fa-file-upload"></i>
                         <span>Kerentanan Upload</span>
                     </a>
