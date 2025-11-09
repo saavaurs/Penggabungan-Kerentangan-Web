@@ -1,6 +1,6 @@
 <?php
 // register.php
-require 'auth_simple.php';
+require 'auth.php';
  $pdo = pdo_connect();
  $msg = '';
  $err = '';
@@ -95,7 +95,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       max-width: 420px;
       background: rgba(26, 31, 58, 0.8);
       backdrop-filter: blur(10px);
-      padding: 2.5rem;
+      padding: 2rem;
       border-radius: 20px;
       border: 1px solid rgba(0, 255, 136, 0.2);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
@@ -119,7 +119,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 
     .brand {
-      width: 72px;
+      width: 150px;
       height: 72px;
       border-radius: 15px;
       display: inline-flex;
@@ -274,8 +274,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 
     .card-footer {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
+      margin-top: 1rem;
+      padding-top: 1rem;
       border-top: 1px solid rgba(0, 255, 136, 0.1);
       text-align: center;
       font-size: 0.8rem;
@@ -304,7 +304,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 <body>
   <div class="card-register">
     <div class="brand-container">
-      <div class="brand">XSS</div>
+      <div class="brand">CyberLabs</div>
       <h4>Buat Akun Baru</h4>
       <small class="subtitle">Isi form berikut untuk registrasi</small>
     </div>
@@ -335,9 +335,8 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     <div class="form-footer">
       <span>Sudah punya akun? <a href="login.php">Login</a></span>
     </div>
-    
     <div class="card-footer">
-      ⚠️ Lab demo: password disimpan plaintext. Produksi harus gunakan <code>password_hash()</code>.
+      &copy; 2025 Sava-Eva-Navaro
     </div>
   </div>
 </body>

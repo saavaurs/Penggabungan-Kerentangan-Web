@@ -1,7 +1,7 @@
 <?php
 // logout.php
 
-// Hancurkan sesi terlebih dahulu
+// Hapus semua session data
 session_start();
  $_SESSION = [];
 session_destroy();
@@ -13,7 +13,7 @@ session_destroy();
 <head>
   <meta charset="utf-8">
   <title>Logging Out...</title>
-  <meta http-equiv="refresh" content="3;url=login_safe.php"> <!-- Arahkan setelah 3 detik -->
+  <meta http-equiv="refresh" content="3;url=login.php"> <!-- Arahkan setelah 3 detik -->
   <style>
     * {
       margin: 0;
@@ -180,13 +180,13 @@ session_destroy();
       
       <p>Anda akan dialihkan ke halaman login dalam beberapa saat...</p>
       
-      <p>Jika tidak dialihkan secara otomatis, <a href="login_safe.php">klik di sini</a>.</p>
+      <p>Jika tidak dialihkan secara otomatis, <a href="login.php">klik di sini</a>.</p>
   </div>
 
   <script>
     // JavaScript sebagai backup jika meta refresh gagal
     setTimeout(function() {
-      window.location.href = 'login_safe.php';
+      window.location.href = 'login.php';
     }, 3000); // 3000 milidetik = 3 detik
   </script>
 </body>

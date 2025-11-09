@@ -2,7 +2,7 @@
 session_start();
 
 $host = 'localhost';
-$db   = 'upload_vul';
+$db   = 'lab_guestbook';
 $user = 'root';
 $pass = '';
 $charset = 'utf8mb4';

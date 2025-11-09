@@ -1,5 +1,6 @@
 <?php
-
+// auth_simple.php - helper koneksi & current_user
+session_start();
 
 function pdo_connect(){
     $host = '127.0.0.1';

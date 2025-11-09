@@ -202,9 +202,14 @@ body::before {
 .stat-card {
   background: rgba(26, 31, 58, 0.6);
   backdrop-filter: blur(10px);
-  padding: 1.5rem;
-  border-radius: 15px;
-  border: 1px solid rgba(0, 212, 255, 0.2);
+  border-radius: 20px;
+  padding: 25px;
+  border: 1px solid rgba(0, 212, 255, 0.1);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 250px; /* Tambah tinggi untuk menampung difficulty */
   transition: all 0.3s ease;
   animation: fadeIn 0.5s ease backwards;
 }
@@ -239,6 +244,12 @@ body::before {
   box-shadow: 0 10px 30px rgba(0, 212, 255, 0.2);
 }
 
+.stat-title {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
 .stat-icon {
   width: 50px;
   height: 50px;
@@ -264,14 +275,73 @@ body::before {
 }
 
 .stat-value {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: bold;
-  margin-bottom: 0.5rem;
+  color: var(--text);
+  margin-bottom: 5px;
 }
 
 .stat-label {
   color: rgba(224, 230, 237, 0.6);
   font-size: 0.9rem;
+}
+/* Difficulty Section */
+.difficulty-section {
+  margin-top: 20px;
+  border-top: 1px solid rgba(0, 212, 255, 0.1);
+  padding-top: 15px;
+}
+
+.difficulty-label {
+  font-size: 0.8rem;
+  color: rgba(224, 230, 237, 0.7);
+  margin-bottom: 8px;
+}
+
+.difficulty-indicator {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.difficulty-stars {
+  display: flex;
+  gap: 5px;
+}
+
+.difficulty-stars span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(224, 230, 237, 0.2);
+  transition: background 0.3s ease;
+}
+
+/* Difficulty Colors */
+.difficulty-indicator.easy .difficulty-stars span:nth-child(-n + 1) {
+  background: var(--success);
+}
+.difficulty-indicator.medium .difficulty-stars span:nth-child(-n + 2) {
+  background: var(--warning);
+}
+.difficulty-indicator.hard .difficulty-stars span:nth-child(-n + 3) {
+  background: var(--danger);
+}
+
+.difficulty-text {
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+.difficulty-indicator.easy .difficulty-text {
+  color: var(--success);
+}
+.difficulty-indicator.medium .difficulty-text {
+  color: var(--warning);
+}
+.difficulty-indicator.hard .difficulty-text {
+  color: var(--danger);
 }
 
 /* Module Cards */
@@ -479,4 +549,44 @@ body::before {
   .modules-grid {
     grid-template-columns: 1fr;
   }
+  
 }
+/* Reasoning (Collapsible) */
+  .reasoning {
+    margin-top: 15px;
+  }
+
+  .reasoning details {
+    cursor: pointer;
+  }
+
+  .reasoning summary {
+    font-size: 0.85rem;
+    color: var(--primary);
+    font-weight: 600;
+    list-style: none; /* Hides default triangle */
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: 1px solid var(--primary);
+    transition: all 0.3s ease;
+  }
+  .reasoning summary:hover {
+    background: rgba(0, 212, 255, 0.1);
+  }
+
+  .reasoning details[open] summary {
+    background: var(--primary);
+    color: var(--darker);
+  }
+
+  .reasoning p {
+    margin-top: 10px;
+    padding: 10px;
+    background: rgba(26, 31, 58, 0.4);
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: rgba(224, 230, 237, 0.8);
+    line-height: 1.5;
+    border-left: 3px solid var(--primary);
+  }

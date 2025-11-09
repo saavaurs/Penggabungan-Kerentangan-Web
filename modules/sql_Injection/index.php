@@ -397,10 +397,7 @@
       </div>
 
       <div class="actions">
-        <!-- Tombol kembali ke dashboard; jika file ini berada di modules/sql_injec/
-             gunakan ../../dashboard.php . Jika dashboard.php ada langsung di webroot
-             dan project folder bernama DVWA_LITE, kamu bisa ganti ke /DVWA_LITE/dashboard.php -->
-        <a class="btn-back" href="../../dashboard.php" aria-label="Kembali ke Dashboard">← Kembali ke Dashboard</a>
+        <a class="btn-back" href="../../dashboard.php" aria-label="Kembali ke Dashboard">Kembali ke Dashboard</a>
       </div>
     </header>
 

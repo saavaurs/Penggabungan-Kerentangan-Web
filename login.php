@@ -1,26 +1,57 @@
 <?php
-// register.php
-require 'auth_simple.php';
- $pdo = pdo_connect();
- $msg = '';
+// login.php
+require 'auth.php'; // tetap panggil jika Anda butuh helper current_user(), dll.
  $err = '';
 
-if($_SERVER['REQUEST_METHOD']==='POST'){
-    $username = trim($_POST['username'] ?? '');
-    $password = $_POST['password'] ?? '';
-    $full_name = trim($_POST['full_name'] ?? '');
 
-    if($username && $password){
-        try {
-            // lab: simpan plaintext, di produksi wajib password_hash()
-            $stmt = $pdo->prepare("INSERT INTO users (username, password, full_name) VALUES (:u,:p,:n)");
-            $stmt->execute([':u'=>$username, ':p'=>$password, ':n'=>$full_name]);
-            $msg = "User berhasil didaftarkan. Silakan login.";
-        } catch (Exception $e) {
-            $err = "Registrasi gagal: kemungkinan username sudah dipakai.";
-        }
+// simple CSRF token (lab/demo)
+if (empty($_SESSION['csrf_token'])) {
+    $_SESSION['csrf_token'] = bin2hex(random_bytes(24));
+}
+
+if($_SERVER['REQUEST_METHOD'] === 'POST'){
+    // CSRF check
+    if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'], $_POST['csrf_token'])) {
+        $err = 'Invalid request (CSRF).';
     } else {
-        $err = "Username & password wajib diisi.";
+        $username = trim($_POST['username'] ?? '');
+        $password = $_POST['password'] ?? '';
+
+        if ($username === '' || $password === '') {
+            $err = 'Username dan password wajib diisi.';
+        } else {
+            $pdo = pdo_connect();
+            $stmt = $pdo->prepare("SELECT id, username, password FROM users WHERE username = :u LIMIT 1");
+            $stmt->execute([':u' => $username]);
+            $u = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if ($u) {
+                // Prefer secure password verification (bcrypt/argon2)
+                // But keep plaintext fallback for lab compatibility:
+                $ok = false;
+                if (password_verify($password, $u['password'])) {
+                    $ok = true;
+                } elseif ($password === $u['password']) { // legacy plaintext (lab only)
+                    $ok = true;
+                }
+
+                if ($ok) {
+                    // login success
+                    // regenerate session id to prevent fixation
+                    session_regenerate_id(true);
+                    $_SESSION['user_id'] = $u['id'];
+                    // optional: unset CSRF token so it's single-use
+                    unset($_SESSION['csrf_token']);
+                    // header('Location: post_vul.php?id=1');
+                    header('Location: dashboard.php');
+                    exit;
+                } else {
+                    $err = 'Login gagal: username atau password salah.';
+                }
+            } else {
+                $err = 'Login gagal: username atau password salah.';
+            }
+        }
     }
 }
 ?>
@@ -29,7 +60,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Register — Lab</title>
+  <title>Login — Lab</title>
   <style>
     * {
       margin: 0;
@@ -71,7 +102,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       height: 100%;
       background: radial-gradient(
           circle at 20% 50%,
-          rgba(0, 255, 136, 0.1) 0%,
+          rgba(0, 212, 255, 0.1) 0%,
           transparent 50%
         ),
         radial-gradient(
@@ -81,14 +112,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
         ),
         radial-gradient(
           circle at 40% 20%,
-          rgba(0, 212, 255, 0.05) 0%,
+          rgba(0, 255, 136, 0.05) 0%,
           transparent 50%
         );
       pointer-events: none;
       z-index: 1;
     }
 
-    .card-register {
+    .card-login {
       position: relative;
       z-index: 2;
       width: 100%;
@@ -97,7 +128,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       backdrop-filter: blur(10px);
       padding: 2.5rem;
       border-radius: 20px;
-      border: 1px solid rgba(0, 255, 136, 0.2);
+      border: 1px solid rgba(0, 212, 255, 0.2);
       box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
       animation: fadeIn 0.5s ease;
     }
@@ -119,14 +150,14 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 
     .brand {
-      width: 72px;
+      width: 150px;
       height: 72px;
       border-radius: 15px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, var(--success), var(--primary));
-      box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
       font-weight: 700;
       font-size: 24px;
       color: #001;
@@ -137,18 +168,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     @keyframes pulse {
       0%, 100% {
         transform: scale(1);
-        box-shadow: 0 8px 24px rgba(0, 255, 136, 0.3);
+        box-shadow: 0 8px 24px rgba(0, 212, 255, 0.3);
       }
       50% {
         transform: scale(1.05);
-        box-shadow: 0 8px 30px rgba(0, 255, 136, 0.5);
+        box-shadow: 0 8px 30px rgba(0, 212, 255, 0.5);
       }
     }
 
     h4 {
       font-size: 1.8rem;
       font-weight: 700;
-      background: linear-gradient(135deg, var(--success), var(--primary));
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       margin-bottom: 0.5rem;
@@ -163,6 +194,9 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       padding: 15px;
       border-radius: 10px;
       margin-bottom: 1.5rem;
+      color: var(--danger);
+      background: rgba(255, 71, 87, 0.1);
+      border-left: 4px solid var(--danger);
       animation: slideDown 0.5s ease;
     }
 
@@ -177,18 +211,6 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       }
     }
 
-    .alert-success {
-      background: rgba(0, 255, 136, 0.1);
-      border-left: 4px solid var(--success);
-      color: var(--success);
-    }
-
-    .alert-danger {
-      background: rgba(255, 71, 87, 0.1);
-      border-left: 4px solid var(--danger);
-      color: var(--danger);
-    }
-
     .form-group {
       margin-bottom: 1.5rem;
     }
@@ -201,11 +223,28 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
       font-size: 0.9rem;
     }
 
+    .form-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .form-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.8rem;
+      transition: color 0.3s ease;
+    }
+
+    .form-link:hover {
+      color: var(--secondary);
+    }
+
     input {
       width: 100%;
       padding: 12px 15px;
       border-radius: 10px;
-      border: 1px solid rgba(0, 255, 136, 0.2);
+      border: 1px solid rgba(0, 212, 255, 0.2);
       background: rgba(26, 31, 58, 0.6);
       color: var(--text);
       font-size: 16px;
@@ -214,18 +253,18 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
     input:focus {
       outline: none;
-      border-color: var(--success);
+      border-color: var(--primary);
       background: rgba(26, 31, 58, 0.8);
-      box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+      box-shadow: 0 0 15px rgba(0, 212, 255, 0.3);
     }
 
     button {
       width: 100%;
-      background: linear-gradient(135deg, var(--success), var(--primary));
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
       border: none;
       padding: 14px;
       border-radius: 10px;
-      color: #001;
+      color: white;
       font-weight: 700;
       font-size: 16px;
       cursor: pointer;
@@ -252,7 +291,7 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
 
     button:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4);
+      box-shadow: 0 10px 20px rgba(0, 212, 255, 0.4);
     }
 
     .form-footer {
@@ -263,35 +302,35 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
     }
 
     .form-footer a {
-      color: var(--success);
+      color: var(--primary);
       text-decoration: none;
       font-weight: 600;
       transition: color 0.3s ease;
     }
 
     .form-footer a:hover {
-      color: var(--primary);
+      color: var(--secondary);
     }
 
     .card-footer {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid rgba(0, 255, 136, 0.1);
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(0, 212, 255, 0.1);
       text-align: center;
       font-size: 0.8rem;
       color: rgba(224, 230, 237, 0.6);
     }
 
     .card-footer code {
-      background: rgba(0, 255, 136, 0.1);
+      background: rgba(0, 212, 255, 0.1);
       padding: 2px 6px;
       border-radius: 4px;
       font-family: 'Courier New', Courier, monospace;
-      color: var(--success);
+      color: var(--primary);
     }
 
     @media (max-width: 600px) {
-      .card-register {
+      .card-login {
         padding: 1.5rem;
       }
       
@@ -302,43 +341,51 @@ if($_SERVER['REQUEST_METHOD']==='POST'){
   </style>
 </head>
 <body>
-  <div class="card-register">
+  <div class="card-login">
     <div class="brand-container">
-      <div class="brand">XSS</div>
-      <h4>Buat Akun Baru</h4>
-      <small class="subtitle">Isi form berikut untuk registrasi</small>
+      <div class="brand">CyberLabs</div>
+      <h4>Selamat datang</h4>
+      <small class="subtitle">Masuk untuk melanjutkan</small>
     </div>
 
-    <?php if($msg): ?>
-      <div class="alert alert-success"><?= htmlspecialchars($msg) ?></div>
-    <?php endif; ?>
     <?php if($err): ?>
-      <div class="alert alert-danger"><?= htmlspecialchars($err) ?></div>
+      <div class="alert">
+        <?= htmlspecialchars($err); ?>
+      </div>
     <?php endif; ?>
 
     <form method="post" novalidate>
+      <input type="hidden" name="csrf_token" value="<?= htmlspecialchars($_SESSION['csrf_token']); ?>">
+
       <div class="form-group">
         <label for="username">Username</label>
-        <input id="username" name="username" placeholder="Pilih username unik" required>
+        <input id="username" name="username" placeholder="masukkan username" required
+               value="<?= isset($_POST['username']) ? htmlspecialchars($_POST['username']) : '' ?>">
       </div>
+
       <div class="form-group">
-        <label for="password">Password</label>
+        <div class="form-label">
+          <label for="password">Password</label>
+          <a href="#" class="form-link">Lupa password?</a>
+        </div>
         <input id="password" name="password" type="password" placeholder="••••••••" required>
       </div>
-      <div class="form-group">
-        <label for="full_name">Nama Lengkap</label>
-        <input id="full_name" name="full_name" placeholder="Nama Anda">
-      </div>
-      <button type="submit">Daftar</button>
+
+      <button type="submit">Masuk</button>
     </form>
 
     <div class="form-footer">
-      <span>Sudah punya akun? <a href="login.php">Login</a></span>
+      <span>Belum punya akun? <a href="register.php">Daftar</a></span>
     </div>
     
     <div class="card-footer">
-      ⚠️ Lab demo: password disimpan plaintext. Produksi harus gunakan <code>password_hash()</code>.
+      &copy; 2025 Sava-Eva-Navaro
     </div>
   </div>
+
+  <script>
+    // focus ke username pada load
+    document.getElementById('username')?.focus();
+  </script>
 </body>
 </html>
