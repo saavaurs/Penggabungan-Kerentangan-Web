@@ -11,7 +11,6 @@ $stmt->execute([':u'=>$uuid]);
 $item = $stmt->fetch(PDO::FETCH_ASSOC);
 if (!$item) { http_response_code(404); exit('Not found'); }
 
-// Ownership check
 if ($item['user_id'] != $_SESSION['user']['id']) {
     http_response_code(403); exit('Forbidden: not owner');
 }
@@ -25,14 +24,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Location: list.php'); exit;
 }
 ?>
-<!doctype html><html><body>
-<h2>Edit SAFE Item (<?=htmlspecialchars($item['uuid'])?>)</h2>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Edit SAFE Item</title>
+<style>
+<?php include __DIR__ . '/../inline_style.php'; ?>
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Edit SAFE Item</h2>
 <form method="post">
-  <input name="title" value="<?=htmlspecialchars($item['title'])?>" style="width:300px"><br><br>
-  <textarea name="content" rows=6 cols=60><?=htmlspecialchars($item['content'])?></textarea><br><br>
+  <input name="title" value="<?=htmlspecialchars($item['title'])?>">
+  <textarea name="content" rows="6"><?=htmlspecialchars($item['content'])?></textarea>
   <input type="hidden" name="uuid" value="<?=htmlspecialchars($item['uuid'])?>">
   <input type="hidden" name="csrf" value="<?=csrf_token()?>">
   <button>Save</button>
 </form>
 <p><a href="list.php">Back</a></p>
-</body></html>
+</div>
+</body>
+</html>

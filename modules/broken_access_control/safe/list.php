@@ -7,10 +7,37 @@ $stmt = $pdo->prepare("SELECT id, uuid, title, created_at FROM items_safe WHERE 
 $stmt->execute([':u' => $_SESSION['user']['id']]);
 $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
-<!doctype html><html><body>
-<h2>SAFE — Items (your items)</h2>
-<p><a href="create.php">Create</a> | <a href="../index.php">Back to Dashboard</a></p>
-<table border=1 cellpadding=6>
+<!doctype html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>SAFE Items</title>
+<style>
+<?php include __DIR__ . '/../inline_style.php'; ?>
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+th, td {
+  border: 1px solid rgba(0,212,255,0.3);
+  padding: 10px;
+}
+th {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+}
+td {
+  background-color: rgba(26,31,58,0.7);
+}
+form { display: inline; }
+</style>
+</head>
+<body>
+<div class="container">
+<h2>SAFE — Your Items</h2>
+<p><a href="create.php">Create</a> | <a href="../index.php">Dashboard</a></p>
+<table>
 <tr><th>UUID</th><th>Title</th><th>Created</th><th>Action</th></tr>
 <?php foreach($rows as $r): ?>
 <tr>
@@ -18,10 +45,9 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
   <td><?=htmlspecialchars($r['title'])?></td>
   <td><?=htmlspecialchars($r['created_at'])?></td>
   <td>
-    <!-- View requires token (user must provide when clicking) -->
     <a href="view.php?u=<?=urlencode($r['uuid'])?>">View</a> |
     <a href="edit.php?u=<?=urlencode($r['uuid'])?>">Edit</a> |
-    <form action="delete.php" method="post" style="display:inline" onsubmit="return confirm('Delete?')">
+    <form action="delete.php" method="post" onsubmit="return confirm('Delete?')">
       <input type="hidden" name="uuid" value="<?=htmlspecialchars($r['uuid'])?>">
       <input type="hidden" name="csrf" value="<?=csrf_token()?>">
       <button>Delete</button>
@@ -30,4 +56,6 @@ $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 </tr>
 <?php endforeach; ?>
 </table>
-</body></html>
+</div>
+</body>
+</html>
