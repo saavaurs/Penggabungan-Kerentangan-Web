@@ -1,5 +1,6 @@
 <?php
 require 'config.php';
+require '../../global_header.php';
 
  $user = $_SESSION['user'];
 ?>

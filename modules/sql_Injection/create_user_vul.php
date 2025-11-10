@@ -2,7 +2,7 @@
 // create_user_vul_form.php
 // DEMO ONLY: VULNERABLE user creation form — gunakan hanya di lab lokal/VM
 
- $dsn = 'mysql:host=127.0.0.1;port=3306;dbname=praktek_sqli;charset=utf8mb4';
+ $dsn = 'mysql:host=127.0.0.1;port=3306;dbname=lab_guestbook;charset=utf8mb4';
  $dbUser = 'root';
  $dbPass = ''; // sesuaikan jika perlu
 
