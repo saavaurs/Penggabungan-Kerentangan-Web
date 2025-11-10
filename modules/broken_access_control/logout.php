@@ -1,15 +1,19 @@
 <?php
-// vuln/logout.php
+// logout.php
+
+// Hancurkan sesi terlebih dahulu
 session_start();
-$_SESSION = [];
+ $_SESSION = [];
 session_destroy();
+
+// Sekarang, tampilkan halaman HTML yang sudah di-styling sebelum mengalihkan
 ?>
 <!doctype html>
 <html lang="id">
 <head>
   <meta charset="utf-8">
   <title>Logging Out...</title>
-  <meta http-equiv="refresh" content="2;url=login.php">
+  <meta http-equiv="refresh" content="3;url=login.php"> <!-- Arahkan setelah 3 detik -->
   <style>
     * {
       margin: 0;
@@ -22,7 +26,11 @@ session_destroy();
       --secondary: #ff00ff;
       --dark: #0a0e27;
       --darker: #060818;
+      --light: #1a1f3a;
       --text: #e0e6ed;
+      --danger: #ff4757;
+      --success: #00ff88;
+      --warning: #ffa502;
     }
 
     body {
@@ -30,12 +38,14 @@ session_destroy();
       background: linear-gradient(135deg, var(--darker) 0%, var(--dark) 100%);
       color: var(--text);
       min-height: 100vh;
+      overflow-x: hidden;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
     }
 
+    /* Animated Background */
     body::before {
       content: "";
       position: fixed;
@@ -43,7 +53,21 @@ session_destroy();
       left: 0;
       width: 100%;
       height: 100%;
-      background: radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%);
+      background: radial-gradient(
+          circle at 20% 50%,
+          rgba(0, 212, 255, 0.1) 0%,
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at 80% 80%,
+          rgba(255, 0, 255, 0.1) 0%,
+          transparent 50%
+        ),
+        radial-gradient(
+          circle at 40% 20%,
+          rgba(0, 255, 136, 0.05) 0%,
+          transparent 50%
+        );
       pointer-events: none;
       z-index: 1;
     }
@@ -85,8 +109,15 @@ session_destroy();
 
     p {
       font-size: 18px;
-      color: rgba(224, 230, 237, 0.8);
+      color: var(--text);
       margin: 15px 0;
+      line-height: 1.6;
+    }
+
+    .logout-message {
+      font-size: 1.2rem;
+      color: rgba(224, 230, 237, 0.8);
+      margin-bottom: 2rem;
     }
 
     .spinner {
@@ -114,6 +145,23 @@ session_destroy();
       border-radius: 10px;
       font-weight: bold;
       transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    a::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+      transition: left 0.5s ease;
+    }
+
+    a:hover::before {
+      left: 100%;
     }
 
     a:hover {
@@ -124,11 +172,22 @@ session_destroy();
 </head>
 <body>
   <div class="container">
-    <h2>Logging Out</h2>
-    <p>You have been logged out successfully.</p>
-    <div class="spinner"></div>
-    <p>Redirecting to login page...</p>
-    <p>If not redirected, <a href="login.php">click here</a>.</p>
+      <h2>Logging Out</h2>
+      
+      <p class="logout-message">Anda telah keluar dari sistem.</p>
+      
+      <div class="spinner"></div>
+      
+      <p>Anda akan dialihkan ke halaman login dalam beberapa saat...</p>
+      
+      <p>Jika tidak dialihkan secara otomatis, <a href="login.php">klik di sini</a>.</p>
   </div>
+
+  <script>
+    // JavaScript sebagai backup jika meta refresh gagal
+    setTimeout(function() {
+      window.location.href = 'login.php';
+    }, 3000); // 3000 milidetik = 3 detik
+  </script>
 </body>
 </html>
