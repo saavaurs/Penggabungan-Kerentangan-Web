@@ -20,3 +20,4 @@ if ($item['user_id'] != $_SESSION['user']['id']) { http_response_code(403); exit
 $stmt = $pdo->prepare("DELETE FROM items_safe WHERE uuid = :u");
 $stmt->execute([':u'=>$uuid]);
 header('Location: list.php'); exit;
+?>

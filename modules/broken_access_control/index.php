@@ -1,6 +1,6 @@
 <?php
 require 'config.php';
-if (empty($_SESSION['user'])) header('Location: login.php');
+
  $user = $_SESSION['user'];
 ?>
 <!DOCTYPE html>
@@ -218,28 +218,6 @@ if (empty($_SESSION['user'])) header('Location: login.php');
       box-shadow: 0 10px 20px rgba(0, 255, 136, 0.4);
     }
 
-    /* Logout Link */
-    .logout-container {
-      text-align: center;
-      margin-top: 3rem;
-    }
-
-    .logout-container a {
-      color: rgba(224, 230, 237, 0.6);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.3s ease;
-      padding: 10px 20px;
-      border-radius: 8px;
-      border: 1px solid rgba(224, 230, 237, 0.2);
-    }
-
-    .logout-container a:hover {
-      color: var(--danger);
-      border-color: var(--danger);
-      background: rgba(255, 71, 87, 0.1);
-    }
-
     /* Responsive */
     @media (max-width: 768px) {
       .areas-container {
@@ -268,10 +246,6 @@ if (empty($_SESSION['user'])) header('Location: login.php');
         <p>Versi aman dengan UUID + Token + Ownership Check.</p>
         <a href="safe/list.php">Masuk ke area SAFE</a>
       </div>
-    </div>
-
-    <div class="logout-container">
-      <a href="logout.php">Logout</a>
     </div>
   </div>
 </body>

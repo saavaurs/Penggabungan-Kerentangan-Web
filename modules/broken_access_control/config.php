@@ -4,7 +4,7 @@ ini_set('display_errors',1);
 error_reporting(E_ALL);
 
 define('DB_HOST','127.0.0.1');
-define('DB_NAME','security');
+define('DB_NAME','lab_guestbook');
 define('DB_USER','root');
 define('DB_PASS','');
 
